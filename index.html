@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Professional interactive virtual piano with real-time keyboard control and stunning visual effects">
+    <title>Virtual Piano Studio | Professional Interactive Piano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 8C4 6.89543 4.89543 6 6 6H10C11.1046 6 12 6.89543 12 8V26H4V8Z"
+                            fill="url(#gradient1)" />
+                        <path d="M14 8C14 6.89543 14.8954 6 16 6H20C21.1046 6 22 6.89543 22 8V26H14V8Z"
+                            fill="url(#gradient2)" />
+                        <path d="M24 8C24 6.89543 24.8954 6 26 6H30C31.1046 6 32 6.89543 32 8V26H24V8Z"
+                            fill="url(#gradient3)" />
+                        <defs>
+                            <linearGradient id="gradient1" x1="8" y1="6" x2="8" y2="26" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#667eea" />
+                                <stop offset="1" stop-color="#764ba2" />
+                            </linearGradient>
+                            <linearGradient id="gradient2" x1="18" y1="6" x2="18" y2="26"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#f093fb" />
+                                <stop offset="1" stop-color="#f5576c" />
+                            </linearGradient>
+                            <linearGradient id="gradient3" x1="28" y1="6" x2="28" y2="26"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4facfe" />
+                                <stop offset="1" stop-color="#00f2fe" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1>Virtual Piano Studio</h1>
+            </div>
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="volume">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                        Volume
+                    </label>
+                    <input type="range" id="volume" min="0" max="100" value="70" class="slider">
+                    <span id="volumeValue">70%</span>
+                </div>
+                <button id="sustainBtn" class="control-btn" title="Toggle Sustain (Spacebar)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Sustain
+                </button>
+                <button id="recordBtn" class="control-btn" title="Record Performance">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                    </svg>
+                    Record
+                </button>
+                <button id="playbackBtn" class="control-btn" disabled title="Playback Recording">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                    </svg>
+                    Play
+                </button>
+                <button id="metronomeBtn" class="control-btn" title="Toggle Metronome">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 22h20L12 2z"></path>
+                        <path d="M12 6v10"></path>
+                    </svg>
+                    Metronome
+                </button>
+            </div>
+        </header>
+
+        <!-- AI Composer Section -->
+        <section class="composer-section">
+            <div class="composer-container">
+                <div class="composer-header">
+                    <h2>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                        AI Piano Composer
+                    </h2>
+                    <p class="composer-subtitle">Describe a mood, season, weather, or emotion - I'll compose music for
+                        it</p>
+                </div>
+
+                <div class="composer-controls">
+                    <div class="mood-input-group">
+                        <input type="text" id="moodInput" class="mood-input"
+                            placeholder="e.g., 'peaceful spring morning', 'stormy night', 'joyful celebration', 'melancholic autumn'..." />
+                        <button id="composeMoodBtn" class="compose-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                            </svg>
+                            Compose & Play
+                        </button>
+                    </div>
+
+                    <div class="preset-moods">
+                        <button class="mood-preset" data-mood="spring">🌸 Spring Blossom</button>
+                        <button class="mood-preset" data-mood="summer">☀️ Summer Joy</button>
+                        <button class="mood-preset" data-mood="autumn">🍂 Autumn Melancholy</button>
+                        <button class="mood-preset" data-mood="winter">❄️ Winter Serenity</button>
+                        <button class="mood-preset" data-mood="rain">🌧️ Rainy Day</button>
+                        <button class="mood-preset" data-mood="storm">⛈️ Thunderstorm</button>
+                        <button class="mood-preset" data-mood="sunrise">🌅 Sunrise Hope</button>
+                        <button class="mood-preset" data-mood="night">🌙 Peaceful Night</button>
+                        <button class="mood-preset" data-mood="joy">😊 Pure Joy</button>
+                        <button class="mood-preset" data-mood="sadness">😢 Deep Sadness</button>
+                        <button class="mood-preset" data-mood="romantic">💕 Romantic Love</button>
+                        <button class="mood-preset" data-mood="epic">⚔️ Epic Adventure</button>
+                    </div>
+
+                    <div class="composer-status">
+                        <span id="currentMood" class="current-mood">No composition playing</span>
+                        <button id="stopComposerBtn" class="stop-btn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="6" width="12" height="12"></rect>
+                            </svg>
+                            Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Piano Section -->
+        <main class="piano-section">
+            <div class="piano-container">
+                <div class="piano-wrapper">
+                    <div id="piano" class="piano">
+                        <!-- White Keys -->
+                        <div class="key white-key" data-note="C4" data-key="A">
+                            <span class="key-label">A</span>
+                            <span class="note-label">C</span>
+                        </div>
+                        <div class="key white-key" data-note="D4" data-key="S">
+                            <span class="key-label">S</span>
+                            <span class="note-label">D</span>
+                        </div>
+                        <div class="key white-key" data-note="E4" data-key="D">
+                            <span class="key-label">D</span>
+                            <span class="note-label">E</span>
+                        </div>
+                        <div class="key white-key" data-note="F4" data-key="F">
+                            <span class="key-label">F</span>
+                            <span class="note-label">F</span>
+                        </div>
+                        <div class="key white-key" data-note="G4" data-key="G">
+                            <span class="key-label">G</span>
+                            <span class="note-label">G</span>
+                        </div>
+                        <div class="key white-key" data-note="A4" data-key="H">
+                            <span class="key-label">H</span>
+                            <span class="note-label">A</span>
+                        </div>
+                        <div class="key white-key" data-note="B4" data-key="J">
+                            <span class="key-label">J</span>
+                            <span class="note-label">B</span>
+                        </div>
+                        <div class="key white-key" data-note="C5" data-key="K">
+                            <span class="key-label">K</span>
+                            <span class="note-label">C</span>
+                        </div>
+                        <div class="key white-key" data-note="D5" data-key="L">
+                            <span class="key-label">L</span>
+                            <span class="note-label">D</span>
+                        </div>
+                        <div class="key white-key" data-note="E5" data-key=";">
+                            <span class="key-label">;</span>
+                            <span class="note-label">E</span>
+                        </div>
+
+                        <!-- Black Keys -->
+                        <div class="key black-key" data-note="C#4" data-key="W" style="left: 7.5%;">
+                            <span class="key-label">W</span>
+                        </div>
+                        <div class="key black-key" data-note="D#4" data-key="E" style="left: 17.5%;">
+                            <span class="key-label">E</span>
+                        </div>
+                        <div class="key black-key" data-note="F#4" data-key="T" style="left: 37.5%;">
+                            <span class="key-label">T</span>
+                        </div>
+                        <div class="key black-key" data-note="G#4" data-key="Y" style="left: 47.5%;">
+                            <span class="key-label">Y</span>
+                        </div>
+                        <div class="key black-key" data-note="A#4" data-key="U" style="left: 57.5%;">
+                            <span class="key-label">U</span>
+                        </div>
+                        <div class="key black-key" data-note="C#5" data-key="O" style="left: 77.5%;">
+                            <span class="key-label">O</span>
+                        </div>
+                        <div class="key black-key" data-note="D#5" data-key="P" style="left: 87.5%;">
+                            <span class="key-label">P</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="info-panel">
+                <div class="info-card">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M10 16h4"></path>
+                        </svg>
+                        Keyboard Controls
+                    </h3>
+                    <div class="key-mapping">
+                        <div class="mapping-row">
+                            <span class="kbd">A-L, ;</span>
+                            <span class="mapping-desc">White keys (C-E)</span>
+                        </div>
+                        <div class="mapping-row">
+                            <span class="kbd">W, E, T, Y, U, O, P</span>
+                            <span class="mapping-desc">Black keys (sharps)</span>
+                        </div>
+                        <div class="mapping-row">
+                            <span class="kbd">Spacebar</span>
+                            <span class="mapping-desc">Sustain pedal</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Status
+                    </h3>
+                    <div class="status-info">
+                        <div class="status-row">
+                            <span>Recording:</span>
+                            <span id="recordStatus" class="status-value">Inactive</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Sustain:</span>
+                            <span id="sustainStatus" class="status-value">Off</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Metronome:</span>
+                            <span id="metronomeStatus" class="status-value">Off</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Notes Played:</span>
+                            <span id="notesPlayed" class="status-value">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Press any key to start playing • Supports polyphony • Professional studio quality</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
