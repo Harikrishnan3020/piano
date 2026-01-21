@@ -38,84 +38,53 @@ class PianoAudioEngine {
         };
     }
 
-    // Create a piano-like sound using Web Audio API
+    // Create a pure piano sound using Web Audio API
     createPianoSound(frequency, duration = 2.0) {
         const now = this.audioContext.currentTime;
 
-        // Create oscillators for rich piano timbre
-        const oscillator1 = this.audioContext.createOscillator();
-        const oscillator2 = this.audioContext.createOscillator();
-        const oscillator3 = this.audioContext.createOscillator();
+        // Use a single sine oscillator for a pure, clean tone
+        const oscillator = this.audioContext.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.value = frequency;
 
-        oscillator1.type = 'sine';
-        oscillator2.type = 'sine';
-        oscillator3.type = 'triangle';
-
-        oscillator1.frequency.value = frequency;
-        oscillator2.frequency.value = frequency * 2; // Octave
-        oscillator3.frequency.value = frequency * 3; // Fifth
-
-        // Create gain nodes for each oscillator
-        const gain1 = this.audioContext.createGain();
-        const gain2 = this.audioContext.createGain();
-        const gain3 = this.audioContext.createGain();
-
-        // Set initial volumes
-        gain1.gain.value = 0.4;
-        gain2.gain.value = 0.2;
-        gain3.gain.value = 0.1;
+        // Create gain node for envelope
+        const gainNode = this.audioContext.createGain();
+        gainNode.gain.value = 0.5;
 
         // Create envelope (ADSR)
         const attackTime = 0.01;
-        const decayTime = 0.1;
-        const sustainLevel = 0.6;
-        const releaseTime = 0.3;
+        const decayTime = 0.2;
+        const sustainLevel = 0.3;
+        const releaseTime = 0.5;
 
         // Attack
-        gain1.gain.setValueAtTime(0, now);
-        gain1.gain.linearRampToValueAtTime(0.4, now + attackTime);
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.5, now + attackTime);
 
         // Decay to sustain
-        gain1.gain.linearRampToValueAtTime(0.4 * sustainLevel, now + attackTime + decayTime);
+        gainNode.gain.linearRampToValueAtTime(0.5 * sustainLevel, now + attackTime + decayTime);
 
         // Connect nodes
-        oscillator1.connect(gain1);
-        oscillator2.connect(gain2);
-        oscillator3.connect(gain3);
+        oscillator.connect(gainNode);
+        gainNode.connect(this.masterGain);
 
-        gain1.connect(this.masterGain);
-        gain2.connect(this.masterGain);
-        gain3.connect(this.masterGain);
-
-        // Start oscillators
-        oscillator1.start(now);
-        oscillator2.start(now);
-        oscillator3.start(now);
+        // Start oscillator
+        oscillator.start(now);
 
         // Store for later stopping
         return {
-            oscillators: [oscillator1, oscillator2, oscillator3],
-            gains: [gain1, gain2, gain3],
+            oscillators: [oscillator],
+            gains: [gainNode],
             stop: () => {
                 const stopTime = this.audioContext.currentTime;
 
                 // Release envelope
-                gain1.gain.cancelScheduledValues(stopTime);
-                gain1.gain.setValueAtTime(gain1.gain.value, stopTime);
-                gain1.gain.linearRampToValueAtTime(0, stopTime + releaseTime);
+                gainNode.gain.cancelScheduledValues(stopTime);
+                gainNode.gain.setValueAtTime(gainNode.gain.value, stopTime);
+                gainNode.gain.linearRampToValueAtTime(0, stopTime + releaseTime);
 
-                gain2.gain.cancelScheduledValues(stopTime);
-                gain2.gain.setValueAtTime(gain2.gain.value, stopTime);
-                gain2.gain.linearRampToValueAtTime(0, stopTime + releaseTime);
-
-                gain3.gain.cancelScheduledValues(stopTime);
-                gain3.gain.setValueAtTime(gain3.gain.value, stopTime);
-                gain3.gain.linearRampToValueAtTime(0, stopTime + releaseTime);
-
-                // Stop oscillators after release
-                oscillator1.stop(stopTime + releaseTime);
-                oscillator2.stop(stopTime + releaseTime);
-                oscillator3.stop(stopTime + releaseTime);
+                // Stop oscillator after release
+                oscillator.stop(stopTime + releaseTime);
             }
         };
     }
@@ -666,6 +635,56 @@ class AIComposer {
 
 
 // ===================================
+// MAESTRO AVATAR CONTROLLER
+// ===================================
+
+class MaestroAvatar {
+    constructor() {
+        this.container = document.querySelector('.maestro-container');
+        this.statusDot = document.querySelector('.status-dot');
+        this.statusText = document.getElementById('maestro-text');
+        this.mouth = document.getElementById('maestro-mouth');
+        this.isPlaying = false;
+        this.reactionTimeout = null;
+    }
+
+    startComposing(moodName) {
+        this.isPlaying = true;
+        this.container.classList.add('maestro-playing');
+        this.statusDot.classList.add('active');
+        this.statusText.textContent = `Composing: ${moodName}`;
+    }
+
+    stopComposing() {
+        this.isPlaying = false;
+        this.container.classList.remove('maestro-playing');
+        this.statusDot.classList.remove('active');
+        this.statusText.textContent = 'Listening...';
+    }
+
+    reactToNote(note) {
+        // Simple reaction even when not "composing" (user playing)
+        if (!this.isPlaying) {
+            this.statusDot.classList.add('active');
+
+            // Random mouth movement
+            const curve = Math.random() * 10 + 20;
+            if (this.mouth) {
+                this.mouth.setAttribute('d', `M-20,20 Q0,${curve} 20,20`);
+            }
+
+            if (this.reactionTimeout) clearTimeout(this.reactionTimeout);
+            this.reactionTimeout = setTimeout(() => {
+                this.statusDot.classList.remove('active');
+                if (this.mouth) {
+                    this.mouth.setAttribute('d', "M-20,20 Q0,20 20,20");
+                }
+            }, 200);
+        }
+    }
+}
+
+// ===================================
 // PIANO CONTROLLER
 // ===================================
 
@@ -674,7 +693,10 @@ class VirtualPiano {
         this.audioEngine = new PianoAudioEngine();
         this.recordingEngine = new RecordingEngine();
         this.metronome = new Metronome(this.audioEngine.audioContext);
+        this.recordingEngine = new RecordingEngine();
+        this.metronome = new Metronome(this.audioEngine.audioContext);
         this.aiComposer = new AIComposer(this);
+        this.maestro = new MaestroAvatar();
 
         // Key mapping
         this.keyMap = {
@@ -855,6 +877,9 @@ class VirtualPiano {
         // Record if recording
         this.recordingEngine.recordNote(note, true);
 
+        // Notify Maestro
+        this.maestro.reactToNote(note);
+
         // Update stats
         this.notesPlayed++;
         this.updateUI();
@@ -945,6 +970,9 @@ class VirtualPiano {
         currentMoodEl.textContent = `♪ Playing: ${displayName}`;
         currentMoodEl.classList.add('active');
         stopBtn.disabled = false;
+
+        // Activate Maestro
+        this.maestro.startComposing(displayName);
     }
 
     stopComposer() {
@@ -960,6 +988,9 @@ class VirtualPiano {
 
         // Remove active state from preset buttons
         document.querySelectorAll('.mood-preset').forEach(b => b.classList.remove('active'));
+
+        // Deactivate Maestro
+        this.maestro.stopComposing();
     }
 
     updateUI() {
